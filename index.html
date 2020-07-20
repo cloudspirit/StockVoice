@@ -1,0 +1,29 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html">
+<title>JS利用百度语音api实现对html内容的朗读</title>
+<script>
+function voice(str){
+	var url = "http://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&spd=5&text=" + encodeURI(str);
+	var n = new Audio(url);
+	n.src = url;
+	n.play();
+}
+function readart(){
+	bm=document.getElementById('art_main').innerHTML;
+	bm=bm.replace(/<[^>]*>|/g,"");
+	voice(bm);
+}
+</script>
+</head>
+<body>
+<div id="art_main">
+	<!--留言内容-->
+	例子：<br>
+	你好
+	<b>哈哈哈</b>
+	<h1>再见，世界</h1>
+</div>
+<a href="javascript:readart();">朗读</a>
+</body>
+</html>
