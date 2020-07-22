@@ -1,8 +1,9 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html,charset="UTF-8">
-<title>JS利用百度语音api实现对html内容的朗读</title>
-<script>
+<meta http-equiv="refresh" content="120">
+<script src="http://libs.baidu.com/jquery/2.1.4/jquery.min.js"></script>
+<script type="text/javascript">
+
 function voice(str){
 	var url = "http://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&spd=5&text=" + encodeURI(str);
 	var n = new Audio(url);
@@ -10,30 +11,53 @@ function voice(str){
 	n.play();
 }
 function readart(){
-	bm=document.getElementById('art_main').innerHTML;
-	bm=bm.replace(/<[^>]*>|/g,"");
+	//bm=document.getElementById('art_main').innerHTML;
+	//bm=bm.replace(/<[^>]*>|/g,"");
+	bm="current price:"+elements[3];
 	voice(bm);
 }
-//指定1秒刷新一次dao			    
-function myrefresh(){
-window.location.reload();
+
+
+$(document).ready(function(){
+	$(function () {
+		setInterval(function () {
+			parseDataM();
+		},10000);
+	})
+});
+function parseDataM(){
+	$.ajax({
+	url:"http://hq.sinajs.cn/list=sz002334,sh601989,sh600031",
+	dataType:"script",
+	cache:"false",
+	type:"GET",
+	success:function(a){
+		
+		var gp1=hq_str_sz002334.split(",");
+		var gp2=hq_str_sh601989.split(",");
+		var gp3=hq_str_sh600031.split(",");
+		document.getElementById("info_a1").innerHTML = gp1[0];
+		document.getElementById("info_a2").innerHTML = gp1[1];
+		document.getElementById("info_a3").innerHTML = gp1[4];
+		document.getElementById("info_a4").innerHTML = gp1[5];
+		document.getElementById("info_a5").innerHTML = gp1[3];
+	
+		
+		voice("当前:"+gp1[3]+"元");
+		}
+	});
 }
-setTimeout('myrefresh()',1000); //指定1秒刷新一次dao
 </script>
 </head>
 <body>
-<div id="art_main">
-	<!--留言内容-->
-	例子：<br>
-	你好
-	<b>哈哈哈</b>
-	<h1>再见，世界</h1>
-		  <script type="text/javascript" src="http://hq.sinajs.cn/list=sh601006" charset="gb2312"></script>
-<script type="text/javascript">
-     var elements=hq_str_sh601006.split(",");
-    document.write("current price:"+elements[3]);
-</script>
+<div class="main">
+  <ul>
+    <li>【<span id="info_a1"></span>】</li>
+    <li><label>开盘：</label><span id="info_a2"></span></li>
+    <li><label>最高：</label><span id="info_a3"></span></li>
+    <li><label>最低：</label><span id="info_a4"></span></li>
+    <li><label>当前：</label><span id="info_a5"></span></li>
+  </ul>
 </div>
-<a href="javascript:readart();">朗读</a>
 </body>
 </html>
