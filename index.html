@@ -1,10 +1,22 @@
 <html>
 <head>
-<meta http-equiv="refresh" content="120">
 <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
 <script type="text/javascript">
 
+    function show()
+    {
+	if(!($('#textId').val()=='')){
+        	var oText=document.getElementById("textId");
+        	var oP =document.createElement("p");
+		stock = oText.value.toLowerCase();
+		stockurl = baseurl+stock+","+"sz002334,sh601989,sh600031";
+		//在页面下方,添加,显示调试变量
+        	oP.innerHTML=stockurl;
+        	document.body.appendChild(oP);
+	}	
+    }
+	
 function voice(str){
 	var url = "http://tts.baidu.com/text2audio?lan=zh&ie=UTF-8&spd=5&text=" + encodeURI(str);
 	var n = new Audio(url);
@@ -26,17 +38,22 @@ $(document).ready(function(){
 		},10000);
 	})
 });
+	
+//sina api的基础URL
+var baseurl = "http://hq.sinajs.cn/list=";
+var stock = "sh600999"
+var stockurl = "http://hq.sinajs.cn/list=sh600999"
+//获取api并播报语音
 function parseDataM(){
 	$.ajax({
-	url:"http://hq.sinajs.cn/list=sz002334,sh601989,sh600031",
+	url:stockurl,
 	dataType:"script",
 	cache:"false",
 	type:"GET",
 	success:function(a){
 		
-		var gp1=hq_str_sz002334.split(",");
-		var gp2=hq_str_sh601989.split(",");
-		var gp3=hq_str_sh600031.split(",");
+		var v_ = 'hq_str_' + stock; //拼接变量名
+		gp1=eval( v_).split(",");
 		document.getElementById("info_a1").innerHTML = gp1[0];
 		document.getElementById("info_a2").innerHTML = gp1[1];
 		document.getElementById("info_a3").innerHTML = gp1[4];
@@ -52,6 +69,8 @@ function parseDataM(){
 </head>
 <body>
 <div class="main">
+	<input type="text" value="sh600999" id="textId" >
+	<input type="button" id="btn" value="ok" onclick="show()">
   <ul>
     <li>【<span id="info_a1"></span>】</li>
     <li><label>开盘：</label><span id="info_a2"></span></li>
@@ -60,5 +79,10 @@ function parseDataM(){
     <li><label>当前：</label><span id="info_a5"></span></li>
   </ul>
 </div>
+	
+<script>
+parseDataM();
+</script>
+	
 </body>
 </html>
